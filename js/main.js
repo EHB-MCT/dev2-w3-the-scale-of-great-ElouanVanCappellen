@@ -3,7 +3,7 @@ import {
 } from "./data.js";
 
 let adjectives;
-let sortDirection = "up";
+let sortDirection = "";
 
 function init() {
     //  laad de JSON oplade.
@@ -21,15 +21,51 @@ function init() {
 function addSortEvents(objectAdjectives) {
     // TODO: sort object items (sortDirection) based on "adjectives.score"
 
+    // code wordt niet verder uitgevoerd na een addEventListener.
     document.getElementById("sort-down").addEventListener('click', function () {
-        sortDirection = ;
+        sortDirection = "down";
+        console.log("sort down");
+        sort(objectAdjectives);
     });
 
     document.getElementById("sort-up").addEventListener('click', function () {
-        sortDirection = ;
+        sortDirection = "up";
+        console.log("sort up");
+        sort(objectAdjectives);
     });
 
-    if (sortDirection == "up") {
+}
+
+function addVoteEvents(objectAdjectives) {
+    // TODO: gebruiken van een forEach om door het object te loopen, met als gevlog dat men kan weten welke "target" moet aangepast worden
+    // document.getElementsByClassName("upvote-button").addEventListener('click', function () {
+    //     upVote(objectAdjectives,);
+    //     console.log("up vote");
+    // });
+    // query selector geeft aleen de eerste passende data terug.
+    // query selector all geeft een lijst van alle passende waarden terug. 
+
+
+    // document.getElementsByClassName("downvote-button").addEventListener('click', function () {
+    //     downVote(objectAdjectives,);
+    //     console.log("down vote");
+    // });
+
+    const upVoteButtons = document.querySelectorAll('.upvote-button');
+    upVoteButtons.forEach(function (button) {
+
+        button.addEventListener('click', function (event) {
+
+            console.log(event.target.value);
+            // target laat weten welke exact het is & value zorgt dat deze een gebruikbare value.
+        })
+
+    });
+
+}
+
+function sort(objectAdjectives) {
+    if (sortDirection == "down") {
         objectAdjectives.sort(function (a, b) {
 
             if (a.score > b.score) {
@@ -39,23 +75,23 @@ function addSortEvents(objectAdjectives) {
             }
         });
         console.log(objectAdjectives);
-    } else if (sortDirection == "down") {
+    } else if (sortDirection == "up") {
+        objectAdjectives.sort(function (a, b) {
 
+            if (a.score > b.score) {
+                return -1
+            } else {
+                return 1
+            }
+        });
+        console.log(objectAdjectives);
     }
 
     render(objectAdjectives);
 }
 
-function addVoteEvents() {
-
-}
-
-function sort() {
-
-}
-
 function render(objectAdjectives) {
-    // TODO: add HTML string to HTML string forEach adjective in adjectives
+    //  add HTML string to HTML string forEach adjective in adjectives
     let htmlCode = ``;
     console.log("rendering...");
 
@@ -75,31 +111,40 @@ function render(objectAdjectives) {
                                <span class="word-score ${scoreGood}">${wordScore.score}</span>
                                <span>${wordScore.word}</span>
                           <div class="vote-buttons">
-                                <button value="ok" class="upvote-button">👍</button>
-                                <button value="ok" class="downvote-button">👎</button>
+                                <button value="${wordScore.word}" class="upvote-button">👍</button>
+                                <button value="${wordScore.word}" class="downvote-button">👎</button>
                           </div>
                        </div>`;
 
 
     });
     // console.log(htmlCode);
-    // TODO: add class based on Score (>= 6 is 'good')
+    //  add class based on Score (>= 6 is 'good')
 
-    // TODO: 3.3 HTML string toevoegen aan pagina -> container.
+    //  3.3 HTML string toevoegen aan pagina -> container.
     scaleOfGreat.innerHTML = htmlCode;
-    // TODO: call addVoteEvents
+    //  call addVoteEvents
     // op het einde omdat ze niet kunnen verhanderen/geklickt worden als ze niet "bestaan"
-
-
+    addVoteEvents(objectAdjectives);
 }
 
-function upVote(target) {
+function upVote(objectAdjectives, target) {
 
+    target = "";
+
+    objectAdjectives.forEach(function (target) {
+        target.score += 0.1;
+    });
 }
 
 
-function downVote(target) {
+function downVote(objectAdjectives, target) {
 
+    target = "";
+
+    objectAdjectives.forEach(function (target) {
+        target.score -= 0.1;
+    });
 }
 
 function updateScore(word, scoreChange) {
