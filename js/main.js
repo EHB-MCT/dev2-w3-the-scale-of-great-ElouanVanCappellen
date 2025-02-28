@@ -19,7 +19,7 @@ function init() {
 }
 
 function addSortEvents(objectAdjectives) {
-    // TODO: sort object items (sortDirection) based on "adjectives.score"
+    // sort object items (sortDirection) based on "adjectives.score"
 
     // code wordt niet verder uitgevoerd na een addEventListener.
     document.getElementById("sort-down").addEventListener('click', function () {
@@ -56,8 +56,23 @@ function addVoteEvents(objectAdjectives) {
 
         button.addEventListener('click', function (event) {
 
+            let targetWord = event.target.value;
+
+            upVote(objectAdjectives, targetWord);
             console.log(event.target.value);
             // target laat weten welke exact het is & value zorgt dat deze een gebruikbare value.
+        })
+
+    });
+
+    const downVoteButtons = document.querySelectorAll('.downvote-button');
+    downVoteButtons.forEach(function (button) {
+
+        button.addEventListener('click', function (event) {
+
+            let targetWord = event.target.value;
+            downVote(objectAdjectives, targetWord);
+            console.log(event.target.value);
         })
 
     });
@@ -130,21 +145,48 @@ function render(objectAdjectives) {
 
 function upVote(objectAdjectives, target) {
 
-    target = "";
+    // TODO: pass on var
+    // array --> object word --> edit
+    // TODO: fix so that sort is kept.
+    console.log(target);
+    objectAdjectives.forEach(function (wordScore) {
+        if (wordScore.word == target) {
 
-    objectAdjectives.forEach(function (target) {
-        target.score += 0.1;
-    });
+            wordScore.score += 0.1;
+
+        } else {
+
+        }
+        console.log(objectAdjectives);
+    })
+    sort(objectAdjectives);
+    render(objectAdjectives);
 }
 
 
 function downVote(objectAdjectives, target) {
 
-    target = "";
+    console.log(target);
+    objectAdjectives.forEach(function (wordScore) {
+        if (wordScore.word == target) {
 
-    objectAdjectives.forEach(function (target) {
-        target.score -= 0.1;
-    });
+            wordScore.score -= 0.1;
+
+        } else {
+
+        }
+        console.log(objectAdjectives);
+    })
+    sort(objectAdjectives);
+    render(objectAdjectives);
+
+    // previous attempt:
+
+    // target = "";
+
+    // objectAdjectives.forEach(function (target) {
+    //     target.score -= 0.1;
+    // });
 }
 
 function updateScore(word, scoreChange) {
