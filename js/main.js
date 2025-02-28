@@ -153,11 +153,9 @@ function upVote(objectAdjectives, target) {
         if (wordScore.word == target) {
 
             wordScore.score += 0.1;
-
-        } else {
-
+            wordScore.score = Math.round(wordScore.score * 100) / 100;
         }
-        console.log(objectAdjectives);
+        // console.log(objectAdjectives);
     })
     sort(objectAdjectives);
     render(objectAdjectives);
@@ -166,16 +164,15 @@ function upVote(objectAdjectives, target) {
 
 function downVote(objectAdjectives, target) {
 
+    //  add a math.round to round out the score result 
     console.log(target);
     objectAdjectives.forEach(function (wordScore) {
         if (wordScore.word == target) {
 
             wordScore.score -= 0.1;
-
-        } else {
-
+            wordScore.score = Math.round(wordScore.score * 100) / 100;
         }
-        console.log(objectAdjectives);
+        // console.log(objectAdjectives);
     })
     sort(objectAdjectives);
     render(objectAdjectives);
