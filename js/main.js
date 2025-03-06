@@ -7,15 +7,31 @@ let sortDirection = "";
 
 function init() {
     //  laad de JSON oplade.
-    let data = getAdjectives();
-    console.log(data);
+    // TODO: load in JSON from API.
+    // TODO: Read the Render based on API object
+    fetch('https://dev2-prima.onrender.com/adjectives')
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(function (data) {
+            console.log('Parsed JSON response:', data);
+            //  render functie callen
+            render(data);
+            //  call addSortevents
+            addSortEvents(data);
+        })
+        .catch(function (error) {
+            console.error('Error fetching data:', error);
+        });
+
+    // let data = getAdjectives();
+    // console.log(data);
     //  JSON omzetten naar een object
-    let adjectiveObject = JSON.parse(data);
-    console.log(adjectiveObject);
-    //  render functie callen
-    render(adjectiveObject);
-    //  call addSortevents
-    addSortEvents(adjectiveObject);
+    // let adjectiveObject = JSON.parse(data);
+    // console.log(adjectiveObject);
 }
 
 function addSortEvents(objectAdjectives) {
@@ -37,19 +53,7 @@ function addSortEvents(objectAdjectives) {
 }
 
 function addVoteEvents(objectAdjectives) {
-    // TODO: gebruiken van een forEach om door het object te loopen, met als gevlog dat men kan weten welke "target" moet aangepast worden
-    // document.getElementsByClassName("upvote-button").addEventListener('click', function () {
-    //     upVote(objectAdjectives,);
-    //     console.log("up vote");
-    // });
-    // query selector geeft aleen de eerste passende data terug.
-    // query selector all geeft een lijst van alle passende waarden terug. 
-
-
-    // document.getElementsByClassName("downvote-button").addEventListener('click', function () {
-    //     downVote(objectAdjectives,);
-    //     console.log("down vote");
-    // });
+    // gebruiken van een forEach om door het object te loopen, met als gevlog dat men kan weten welke "target" moet aangepast worden
 
     const upVoteButtons = document.querySelectorAll('.upvote-button');
     upVoteButtons.forEach(function (button) {
@@ -141,49 +145,58 @@ function render(objectAdjectives) {
     //  call addVoteEvents
     // op het einde omdat ze niet kunnen verhanderen/geklickt worden als ze niet "bestaan"
     addVoteEvents(objectAdjectives);
+    console.log(objectAdjectives);
 }
 
 function upVote(objectAdjectives, target) {
 
-    // TODO: pass on var
+    // TODO: send the word being upvoted to server.
+    // TODO: render the updated score.
     // array --> object word --> edit
-    // TODO: fix so that sort is kept.
+    // fix so that sort is kept.
     console.log(target);
-    objectAdjectives.forEach(function (wordScore) {
-        if (wordScore.word == target) {
 
-            wordScore.score += 0.1;
-            wordScore.score = Math.round(wordScore.score * 100) / 100;
-        }
-        // console.log(objectAdjectives);
-    })
-    sort(objectAdjectives);
-    render(objectAdjectives);
+    fetch(`https://dev2-prima.onrender.com/upvote/${target}`)
+        .then(function () {
+            init();
+        });
+
+    // objectAdjectives.forEach(function (wordScore) {
+    //     if (wordScore.word == target) {
+
+    //         wordScore.score += 0.1;
+    //         wordScore.score = Math.round(wordScore.score * 100) / 100;
+    //     }
+    //     // console.log(objectAdjectives);
+    // })
+    // sort(objectAdjectives);
+    // render(objectAdjectives);
 }
 
 
 function downVote(objectAdjectives, target) {
 
-    //  add a math.round to round out the score result 
-    console.log(target);
-    objectAdjectives.forEach(function (wordScore) {
-        if (wordScore.word == target) {
+    // TODO: send the word being downvoted to server.
+    // TODO: render the updated score.
 
-            wordScore.score -= 0.1;
-            wordScore.score = Math.round(wordScore.score * 100) / 100;
-        }
-        // console.log(objectAdjectives);
-    })
-    sort(objectAdjectives);
-    render(objectAdjectives);
+    fetch(`https://dev2-prima.onrender.com/downvote/${target}`)
+        .then(function () {
+            init();
+        })
 
-    // previous attempt:
+    // //  add a math.round to round out the score result 
+    // console.log(target);
+    // objectAdjectives.forEach(function (wordScore) {
+    //     if (wordScore.word == target) {
 
-    // target = "";
+    //         wordScore.score -= 0.1;
+    //         wordScore.score = Math.round(wordScore.score * 100) / 100;
+    //     }
+    //     // console.log(objectAdjectives);
+    // })
+    // sort(objectAdjectives);
+    // render(objectAdjectives);
 
-    // objectAdjectives.forEach(function (target) {
-    //     target.score -= 0.1;
-    // });
 }
 
 function updateScore(word, scoreChange) {
